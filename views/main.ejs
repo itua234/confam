@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <style>
+    #intro, #step1, #step2, #step3 {
+        display: none;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        right: 0;
+        transition: all 0.3s ease;
+    }
+    #intro {
+        display: block;
+        position: relative;
+    }
+    </style>
+    <body>
+        <div class="modal-overlayy">
+            <div class="al-modal-content bg-white rounded-3">
+                <div class="" style="">
+                    <!-- <img src="mono-logo.png" alt="Allow" class="mono-logo">
+                    <button class="close-button"></button> -->
+                </div>
+
+                <div class="content-box position-relative">
+                    <%- include('steps/intro') %>
+                    <%- include('steps/step1') %>
+                    <%- include('steps/step2') %>
+                </div>
+
+            </div>
+        </div>
+
+        <script src="/assets/js/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("#intro").show();
+                $("#step1, #step2, #step3").hide();
+        
+                function showStep(currentStep, nextStep, direction = 'right') {
+                    const width = $('.content-box').width();
+                    
+                    // Set initial positions
+                    $(nextStep).css({
+                        display: 'block',
+                        left: direction === 'right' ? width : -width,
+                        position: 'absolute'
+                    });
+                    
+                    $(currentStep).css({
+                        position: 'absolute'
+                    });
+        
+                    // Animate
+                    $(currentStep).animate({ left: direction === 'right' ? -width : width }, 300);
+                    $(nextStep).animate({ left: 0 }, 300, function() {
+                        $(currentStep).hide();
+                        $(nextStep).css('position', 'relative');
+                    });
+                }
+        
+                // $(".link-button").click(function() {
+                //     showStep("#intro", "#step1");
+                // });
+                $("#intro .al-primary-button").click(function() {
+                    showStep("#intro", "#step1");
+                });
+
+                $("#step1 .al-primary-button").click(function() {
+                    showStep("#step1", "#step2");
+                });
+
+                $("#step2 .al-primary-button").click(function() {
+                    showStep("#step2", "#step3");
+                });
+            });
+
+            $(document).ready(function() {
+                $("#phoneVerificationForm").submit(async function(e) {
+                    e.preventDefault();
+                    const sessionToken = $('input[name="sessionToken"]').val();
+                    
+                    try {
+                        const response = await fetch('/api/verify-phone', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                phone: $("#phone").val(),
+                                sessionToken: sessionToken
+                            })
+                        });
+                        // Handle response...
+                    } catch (error) {
+                        // Handle error...
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

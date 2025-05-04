@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KYC Modal Test</title>
+  <!-- Your library's CSS (if any) -->
+  <link rel="stylesheet" href="/kyc-modal.css">
+</head>
+<body>
+  <h1>KYC Modal Development Test</h1>
+  
+  <button id="launch-kyc">Launch KYC Verification</button>
+
+  <div class="modal" id="kyc-modal" style="display:non">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>KYC Verification</h2>
+      <p>Please complete the verification process.</p>
+      <!-- KYC content will be injected here -->
+    </div>
+  </div>
+  
+  <!-- Include your KYC library -->
+  <script src="/js/script.js"></script>
+  
+  <script>
+    // Initialize the KYC service
+    const kyc = new KYCService({
+      companyId: '<%= companyId %>',
+      apiKey: '<%= apiKey %>',
+      environment: 'development'
+    });
+    
+    kyc.init();
+    
+    // Launch modal when button is clicked
+    document.getElementById('launch-kyc').addEventListener('click', () => {
+      kyc.verifyUser({
+        userIdentifier: 'testuser@example.com',
+        requiredLevel: 1,
+        onSuccess: (verification) => {
+          console.log('Verification success:', verification);
+          alert('Verification successful!');
+        },
+        onError: (error) => {
+          console.error('Verification error:', error);
+          alert('Verification failed: ' + error.message);
+        }
+      });
+    });
+  </script>
+</body>
+</html>

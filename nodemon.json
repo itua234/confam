@@ -1,0 +1,13 @@
+{
+    "watch": [
+        "app.ts",
+        "routes/**/*",
+        "models/**/*",
+        "app/**/*",
+        "config/**/*"
+    ],
+    "ignore": ["**/*.spec.ts", "**/*.test.ts", "views/**/*"],
+    "exec": "ts-node app.ts",
+    "ext": "ts,js,json,ejs",
+    "delay": "500"
+}

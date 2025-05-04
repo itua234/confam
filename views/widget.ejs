@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 400px;
+            max-width: 90%;
+        }
+
+        .verification-form {
+            padding: 20px;
+        }
+
+        .form-header {
+            margin-bottom: 30px;
+        }
+
+        .form-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-item-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-item-icon {
+            width: 24px;
+            height: 24px;
+            background: #f0f0f0;
+            border-radius: 50%;
+        }
+
+        .form-item-text {
+            font-size: 14px;
+        }
+
+        .form-item-text small {
+            display: block;
+            color: #666;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .grant-button {
+            background-color: #2196F3;
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 30px;
+            cursor: pointer;
+        }
+
+        .grant-button:hover {
+            background-color: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <div class="modal-overlay">
+        <div class="modal-content">
+            <div class="verification-form">
+                <div class="form-header">
+                    <h3>Confirm the details you want to share with Verifi</h3>
+                </div>
+
+                <div class="form-item">
+                    <div class="form-item-left">
+                        <div class="form-item-icon"></div>
+                        <div class="form-item-text">
+                            Personal Information
+                            <small>Name, Email, Phone Number</small>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="form-item">
+                    <div class="form-item-left">
+                        <div class="form-item-icon"></div>
+                        <div class="form-item-text">
+                            Verification Documents
+                            <small>BVN, NIN, ID Cards</small>
+                        </div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <button class="grant-button">Grant Permission →</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

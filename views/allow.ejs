@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KYC Modal Example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <h1>KYC Verification Demo</h1>
+    <button id="kyc-btn" type="button"  onclick="allow()">Start KYC Verification</button>
+
+    <!-- Load the KYCModal script -->
+    <script src="/index.js"></script>
+    <script>
+        // Create an instance of Allow modal with your public key and options
+        new Allow({
+            key: "'YOUR_PUBLIC_KEY'",
+            title: "KYC Verification",
+            //description: "Please complete the KYC verification process.",
+            //buttonText: "Verify Now
+            onSuccess: function(data) {
+                alert('KYC Success: ' + JSON.stringify(data));
+            },
+            onError: function(error) {
+                alert('KYC Error: ' + JSON.stringify(error));
+            },
+            onClose: function() {
+                alert('KYC Modal closed');
+            }
+        });
+    </script>
+    <script>
+        // function sendMessageToParent(type, data = {}) {
+        //     if (window.parent) {
+            // const referrer = document.referrer;
+            // const url = new URL(referrer);
+            // const origin = url.origin;
+        //         window.parent.postMessage({ type, data }, '*');
+        //     }
+        // }
+        // document.getElementById('verifyButton').addEventListener('click', async () => {
+        //     try {
+        //         // Your verification logic here
+        //         const result = await verifyUser();
+        //         // On successful verification
+        //         sendMessageToParent('KYC_SUCCESS', result);
+        //     }catch (error) {
+        //         // On error
+        //         sendMessageToParent('KYC_ERROR', { message: error.message });
+        //     }
+        // });
+        // // For close button
+        // document.getElementById('closeButton').addEventListener('click', () => {
+        //     sendMessageToParent('KYC_CLOSE');
+        // });
+    </script>
+</body>
+</html>
