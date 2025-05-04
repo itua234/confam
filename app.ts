@@ -8,6 +8,7 @@ import csrf from 'csurf';
 dotenv.config();
 import 'module-alias/register';
 // import './app/services/queues';
+const user = require("./user.json");
 
 import db from './models'
 import api from './routes/api';
@@ -37,11 +38,11 @@ app.use(cors({
 // Security middleware
 app.use(helmet());
 
-app.use(csrf());
-app.use((req, res, next) => {
-  res.locals.csrfToken = req.csrfToken();
-  next();
-});
+// app.use(csrf());
+// app.use((req, res, next) => {
+//   res.locals.csrfToken = req.csrfToken();
+//   next();
+// });
 
 // Rate limiting
 const limiter = rateLimit({
@@ -104,11 +105,11 @@ function useRoutes(): void {
   // Route to render test page
   app.get('/', async (req: Request, res: Response) => {
     //await client.set("foo", "bar");
-    const user = require("/user.json")
+    res.json(user);
     
-    res.render('allow', {
-      user: user,
-    });
+    // res.render('allow', {
+    //   user: user,
+    // });
   });
   app.get('/test-modal', async (req: Request, res: Response) => {
     res.render('main');
