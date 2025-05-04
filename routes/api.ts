@@ -38,5 +38,6 @@ router.get('/', (req: Request, res: Response) => {
         version: '1.1.0'
     });
 });
+router.post('/allow/initiate', [authMiddleware.authenticateAppBySecretKey], kycController.initiate);
 
 export default router;

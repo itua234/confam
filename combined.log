@@ -1,0 +1,14 @@
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-04 15:10:14"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-04 15:10:14"}
+{"level":"info","message":"Authentication successful for App ID: 870efff5-2e38-4aeb-b074-d30627c73bcd (Company: Tech Innovators Inc.). Request processed in 402ms.","service":"kyc-saas-auth","timestamp":"2025-05-04 15:10:15"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-04 15:11:44"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-04 15:11:44"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-04 15:13:23"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-04 15:13:23"}
+{"level":"warn","message":"Authentication failed: Invalid API key - sk_tes...","service":"kyc-saas-auth","timestamp":"2025-05-04 15:13:24"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-04 15:18:07"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-04 15:18:07"}
+{"level":"error","message":"Authentication failed: Invalid API key - sk_tes...","service":"kyc-saas-auth","timestamp":"2025-05-04 15:18:07"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-04 15:28:51"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-04 15:28:51"}
+{"level":"info","message":"Authentication successful for App ID: 870efff5-2e38-4aeb-b074-d30627c73bcd (Company: Tech Innovators Inc.). Request processed in 717ms.","service":"kyc-saas-auth","timestamp":"2025-05-04 15:28:52"}

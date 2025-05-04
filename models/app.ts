@@ -30,19 +30,11 @@ type AppModelStatic = typeof Model & {
 
 module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').DataTypes) => {
     const App = <AppModelStatic>sequelize.define('App', {
-        id: {
-            type: DataTypes.UUID,
-            primaryKey: true,
-            defaultValue: DataTypes.UUIDV4,
-        },
-        name: {type: DataTypes.STRING, allowNull: false},
-        display_name: {type: DataTypes.STRING, allowNull: false},
-        logo: {type: DataTypes.STRING, allowNull: true},
-        test_public_key: {
-            type: DataTypes.STRING,
-            unique: true,
-            allowNull: false,
-        },
+        id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
+        name: { type: DataTypes.STRING, allowNull: false},
+        display_name: { type: DataTypes.STRING, allowNull: false },
+        logo: { type: DataTypes.STRING, allowNull: true },
+        test_public_key: { type: DataTypes.STRING, unique: true, allowNull: false },
         test_secret_key: {
             type: DataTypes.VIRTUAL,
             get() {
@@ -54,13 +46,9 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
             },
             set(value) {
                 throw new Error('Do not try to set the `test_secret_key` value!');
-            },
+            }
         },
-        live_public_key: {
-            type: DataTypes.STRING,
-            unique: true,
-            allowNull: false,
-        },
+        live_public_key: { type: DataTypes.STRING, unique: true, allowNull: false },
         live_secret_key: {
             type: DataTypes.VIRTUAL,
             get() {
@@ -104,7 +92,6 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
             
                 await client.set(`secret:${testSecret}`, app.id);
                 await client.set(`secret:${liveSecret}`, app.id);
-                //await redisClient.disconnect();
             },
             beforeUpdate: async (app) => {
                 // if (app.changed('test_secret_key')) {
