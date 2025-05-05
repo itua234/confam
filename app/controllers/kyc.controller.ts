@@ -18,14 +18,6 @@ function generateIdentityHash(type: string, number: string) {
 function generateOTP() {
     return Math.floor(100000 + Math.random() * 900000).toString();
 }
-// export function testEncryption() {
-//     const text = 'Hello, World!';
-//     const encrypted = encrypt(text);
-//     const decrypted = decrypt(encrypted);
-//     console.log('Original:', text);
-//     console.log('Encrypted:', encrypted);
-//     console.log('Decrypted:', decrypted);
-// }
 
 exports.initiate = async(req: ExpressRequest, res: Response) => {
     const {

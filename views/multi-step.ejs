@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.m.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+        <link rel="stylesheet" href="./styles.cs">
+    </head>
+    <style>
+    .step {
+        padding: 20px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+    }
+
+    .progress-bar {
+        background-color: red;
+        height: 10px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .progress-bar div {
+        background-color: #4CAF50;
+        height: 100%;
+        width: 0%; /* Initial width */
+    }
+    </style>
+    <body>
+        <form id="multiStepForm">
+            <div class="step" id="step1">
+              <h2>Step 1: Personal Information</h2>
+              <label for="name">Name:</label>
+              <input type="text" id="name" name="name" required><br><br>
+              <label for="email">Email:</label>
+              <input type="email" id="email" name="email" required><br><br>
+              <button type="button" class="next-step">Next</button>
+            </div>
+          
+            <div class="step" id="step2" style="display: none;">
+              <h2>Step 2: Contact Details</h2>
+              <label for="phone">Phone:</label>
+              <input type="tel" id="phone" name="phone"><br><br>
+              <label for="address">Address:</label>
+              <textarea id="address" name="address"></textarea><br><br>
+              <button type="button" class="prev-step">Previous</button>
+              <button type="button" class="next-step">Next</button>
+            </div>
+          
+            <div class="step" id="step3" style="display: none;">
+              <h2>Step 3: Preferences</h2>
+              <label for="option1">Option 1:</label>
+              <input type="checkbox" id="option1" name="option1"><br><br>
+              <label for="option2">Option 2:</label>
+              <input type="checkbox" id="option2" name="option2"><br><br>
+              <button type="button" class="prev-step">Previous</button>
+              <button type="submit">Submit</button>
+            </div>
+          
+            <div id="form-progress">
+                <div class="progress-bar">
+                    <div></div>
+                </div>
+            </div>
+        </form>
+
+        <script src="/assets/js/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                var $steps = $(".step");
+                var $progressBar = $("#form-progress .progress-bar div");
+                var currentStep = 0;
+                var numSteps = $steps.length;
+
+                function updateProgressBar() {
+                    var progress = ((currentStep + 1) / numSteps) * 100;
+                    $progressBar.css("width", progress + "%");
+                }
+
+                function showStep(stepIndex) {
+                    $steps.hide();
+                    $steps.eq(stepIndex).show();
+                    updateProgressBar();
+                }
+
+                // Initial display
+                showStep(currentStep);
+
+                // Next button click handler
+                $(".next-step").on("click", function() {
+                    // Basic validation (you can add more robust validation here)
+                    var isValid = true;
+                    var currentInputs = $steps.eq(currentStep).find("input[required], textarea[required]");
+                    currentInputs.each(function() {
+                    if ($(this).val() === "") {
+                        isValid = false;
+                        $(this).addClass("error"); // Add a class for visual error indication
+                    } else {
+                        $(this).removeClass("error");
+                    }
+                    });
+
+                    if (isValid && currentStep < numSteps - 1) {
+                        currentStep++;
+                        showStep(currentStep);
+                    } else if (!isValid) {
+                        alert("Please fill in all required fields in this step.");
+                    }
+                });
+
+                // Previous button click handler
+                $(".prev-step").on("click", function() {
+                    if (currentStep > 0) {
+                        currentStep--;
+                        showStep(currentStep);
+                    }
+                });
+
+                // Form submission (optional - you can handle this with a standard form submit)
+                $("#multiStepForm").on("submit", function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    // Gather all form data
+                    var formData = $(this).serialize();
+
+                    // You can now process the formData using AJAX or any other method
+                    console.log("Form Data:", formData);
+                    alert("Form submitted successfully!"); // Replace with your actual submission logic
+                });
+            });
+        </script>
+    </body>
+</html>

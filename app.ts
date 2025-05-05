@@ -105,14 +105,14 @@ function useRoutes(): void {
   // Route to render test page
   app.get('/', async (req: Request, res: Response) => {
     //await client.set("foo", "bar");
-    res.json(user);
+    //res.json(user);
     
-    // res.render('allow', {
-    //   user: user,
-    // });
+    res.render('index', {
+      user: user,
+    });
   });
   app.get('/test-modal', async (req: Request, res: Response) => {
-    res.render('main');
+    res.render('main', {user: user});
   });
 
   // Main routes

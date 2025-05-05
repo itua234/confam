@@ -31,7 +31,7 @@
             "type": "NIN",
             "text": "98765432109",
             "image": "https://example.com/nin.jpg",
-            "verified": true,
+            "verified": false,
             "verified_at": "2024-04-01T10:00:00Z",
             "expired_at": "2030-04-01T10:00:00Z"
         },

@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 const router = express.Router();
-import authMiddleware from "@middleware/auth.middleware";
+//import authMiddleware from "@middleware/auth.middleware";
 import multer, { MulterError, StorageEngine } from 'multer';
 //import customerValidator from '@validators/auth.validator';
 
@@ -38,6 +38,5 @@ router.get('/', (req: Request, res: Response) => {
         version: '1.1.0'
     });
 });
-router.post('/allow/initiate', [authMiddleware.authenticateAppBySecretKey], kycController.initiate);
 
 export default router;
