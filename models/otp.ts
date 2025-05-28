@@ -7,7 +7,7 @@ export interface OtpAttributes extends Model<InferAttributes<OtpAttributes>, Inf
     otpable_type: string;
     code: string;
     valid: boolean;
-    purpose: 'email_verification' | 'phone_verification' | 'password_reset' | 'password_change';
+    purpose: 'email_verification' | 'phone_verification' | 'nin_verification' | 'bvn_verification';
 }
 
 // Define the OtpModelStatic type
@@ -31,9 +31,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         purpose: {
             type: DataTypes.ENUM(
                 'email_verification',
-                'phone_verification',
-                'password_reset',
-                'password_change'
+                'phone_verification'
             ),
             defaultValue: 'email_verification',
         },
@@ -41,10 +39,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         tableName: 'otps',
         timestamps: true,
         createdAt: 'created_at',
-        updatedAt: 'updated_at',
-        defaultScope: {
-            //attributes: { exclude: ['createdAt', 'updatedAt'] }
-        }
+        updatedAt: 'updated_at'
     });
 
     return Otp;

@@ -14,6 +14,7 @@
     "state": "California",
     "city": "Los Angeles",
     "zip_code": "90001",
+    "bank_accounts": false,
     "verification_documents": [
         {
             "id": "123e4567-e89b-12d3-a456-426614174000",

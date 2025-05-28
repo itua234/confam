@@ -72,22 +72,23 @@ async function startServer() {
     await db.sequelize.authenticate();
     console.log('Connection has been established successfully.');
     // Only authenticate on first start, not on every reload
-    if (!db.sequelize.connectionManager.hasOwnProperty('getConnection')) {
-      if (process.env.FORCE_DB_SYNC === 'true') {
-        const syncOptions = NODE_ENV == "development" ? {} : { alter: false };
-        await db.sequelize.sync(syncOptions);
-        console.log('Connection has been established successfully.');
-      }
-    }
-
-    app.listen(PORT, () => {
-      console.log(`[START] Server running on Port: ${PORT}`);
-    });
-    useRoutes();
+    // if (!db.sequelize.connectionManager.hasOwnProperty('getConnection')) {
+    //   if (process.env.FORCE_DB_SYNC === 'true') {
+    //     const syncOptions = NODE_ENV == "development" ? {} : { alter: false };
+    //     await db.sequelize.sync(syncOptions);
+    //     console.log('Connection has been established successfully.');
+    //   }
+    // }
   } catch (err) {
-    console.error('Unable to connect to the database:', err);
+    console.log('Unable to connect to the database:', err);
   }
 }
+
+useRoutes();
+app.listen(PORT, () => {
+  console.log(`[START] Server running on Port: ${PORT}`);
+});
+startServer().catch(console.log);
 
 // Routes configuration
 function useRoutes(): void {
@@ -105,16 +106,10 @@ function useRoutes(): void {
   // Route to render test page
   app.get('/', async (req: Request, res: Response) => {
     //await client.set("foo", "bar");
-    //res.json(user);
-    
-    res.render('index', {
+    res.render('allow', {
       user: user,
     });
   });
-  app.get('/test-modal', async (req: Request, res: Response) => {
-    res.render('main', {user: user});
-  });
-
   // Main routes
   app.use('/', web);
   app.use('/api/v1', api);
@@ -127,6 +122,4 @@ function useRoutes(): void {
   // Global error handler
   app.use(globalErrorHandler);
 }
-
-startServer();
 export default app;

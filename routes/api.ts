@@ -9,7 +9,7 @@ import multer, { MulterError, StorageEngine } from 'multer';
 const kycController = require('@controllers/kyc.controller');
 
 // Configure multer for file uploads
-const storage: StorageEngine = multer.memoryStorage();;
+const storage: StorageEngine = multer.memoryStorage();
 const upload = multer({ storage: storage });
 // Middleware to handle multer errors
 const handleMulterError = (err: any, req: Request, res: Response, next: NextFunction) => {

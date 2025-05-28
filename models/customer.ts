@@ -6,9 +6,9 @@ export interface CustomerAttributes extends Model<InferAttributes<CustomerAttrib
     token: string;
     phone?: string | null;
     phone_verified_at?: Date;
-    verified: boolean;
+    encrypted_pii: string;
+    status: 'pending' | 'verified' | 'rejected';
     verified_at?: Date;
-    status: 'PENDING' | 'VERIFIED' | 'REJECTED';
     is_blacklisted: boolean;
 }
 
@@ -20,7 +20,7 @@ type CustomerModelStatic = typeof Model & {
 module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').DataTypes) => {
     const Customer = <CustomerModelStatic>sequelize.define('Customer', {
         id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
-        token: { type: DataTypes.TEXT, allowNull: false },
+        token: { type: DataTypes.STRING, allowNull: false },
         phone: {
             type: DataTypes.TEXT,
             unique: true,
@@ -38,15 +38,9 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
             }
         },
         phone_verified_at: { type: DataTypes.DATE, allowNull: true },
-        verified: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: false,
-            get() {
-                return Boolean(this.getDataValue('verified'));
-            }
-        },
+        encrypted_pii: { type: DataTypes.TEXT, allowNull: true },
+        status: { type: DataTypes.ENUM('pending', 'verified', 'rejected'), defaultValue: 'pending' },
         verified_at: { type: DataTypes.DATE, allowNull: true },
-        status: { type: DataTypes.ENUM('PENDING', 'VERIFIED', 'REJECTED'), defaultValue: 'PENDING' },
         is_blacklisted: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,

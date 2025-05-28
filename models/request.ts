@@ -7,12 +7,14 @@ export interface RequestAttributes extends Model<InferAttributes<RequestAttribut
     reference: string;
     redirect_url: string;
     kyc_level: string;
-    bank_accounts: boolean;
+    bank_accounts_requested: boolean;
+    encrypted_data?: string;
     allow_url?: string;
     kyc_token: string;
-    token_expires_at: Date;
     company_id: string;
-    customer_id?: string;
+    status: 'initiated' | 'otp_pending' | 'kyc_processing' | 'completed' | 'failed';
+    created_at?: Date;
+    updated_at?: Date;
 }
 
 // Define the CustomerModelStatic type
@@ -31,11 +33,11 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         },  
         reference: { type: DataTypes.STRING, allowNull: false, unique: true },
         redirect_url: { type: DataTypes.STRING, allowNull: false },
-        kyc_level: { type: DataTypes.ENUM('basic', 'advanced'), allowNull: false },
-        bank_accounts: { type: DataTypes.BOOLEAN, allowNull: false },
+        kyc_level: { type: DataTypes.ENUM('basic', 'advanced'), defaultValue: 'basic' },
+        bank_accounts_requested: { type: DataTypes.BOOLEAN, defaultValue: false },
+        encrypted_data: { type: DataTypes.TEXT, allowNull: true },
         allow_url: {type: DataTypes.STRING, allowNull: true},
         kyc_token: DataTypes.STRING, 
-        token_expires_at: DataTypes.DATE,
         company_id: {
             type: DataTypes.UUID,
             references: {
@@ -44,14 +46,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
             },
             allowNull: false
         },
-        customer_id: {
-            type: DataTypes.UUID,
-            references: {
-                model: { tableName: 'customers' },
-                key: 'id',
-            },
-            allowNull: true,
-        },
+        status: { type: DataTypes.ENUM('initiated', 'otp_pending', 'kyc_processing', 'completed', 'failed'), defaultValue: 'initiated' },
     }, {
         hooks: {
             beforeCreate: (request) => {

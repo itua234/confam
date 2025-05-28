@@ -108,8 +108,11 @@ exports.showVerificationPage = async(req: ExpressRequest, res: Response) => {
         // });
 
     } catch (error) {
-        console.error('Error in verification page:', error);
-        return res.redirect('/error');
+        //console.log('Error in verification page:', error);
+        return res.status(500).json({
+            message: 'An error occurred while fetching verification page',
+            error: true
+        });
     }
 }
 

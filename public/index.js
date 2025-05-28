@@ -62,7 +62,7 @@
             // Create a new browser window
             const windowFeatures = 'width=600,height=600,resizable=yes,scrollbars=yes,status=yes';
             const verificationWindow = window.open(
-                'http://127.0.0.1:8080/test-modal',
+                'http://127.0.0.1:5173',
                 'KYC Verification',
                 windowFeatures
             );
@@ -74,7 +74,7 @@
                     <div class="allow-modal-content" style="border:2px solid black">
                         <iframe 
                             class="allow-iframe"
-                            src="http://127.0.0.1:8080/test-modal"
+                            src="http://127.0.0.1:5173"
                             allow="camera; microphone"
                            
                             frameborder="0"
