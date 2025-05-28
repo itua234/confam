@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from 'express';
 const router = express.Router();
-//import authMiddleware from "@middleware/auth.middleware";
+import authMiddleware from "@middleware/auth.middleware";
 import multer, { MulterError, StorageEngine } from 'multer';
 //import customerValidator from '@validators/auth.validator';
 
@@ -38,5 +38,54 @@ router.get('/', (req: Request, res: Response) => {
         version: '1.1.0'
     });
 });
+
+router.post('/allow/initiate', [authMiddleware.authenticateAppBySecretKey], kycController.initiate);
+// router.get('/allow/verification/:kyc_token', kycController.showVerificationPage);
+// router.post('/allow/verify-phone', kycController.verifyPhone);
+
+// router.get('/allow/customers', function (req: Request, res: Response) {
+    
+// });
+// router.route('/allow/customers/:reference') 
+// .get(function (req: Request, res: Response) {
+//     res.json({
+//         status: 'ok',
+//         app: 'allow!! API...',
+//         version: '1.1.0'
+//     });
+// }).delete(function (req: Request, res: Response) {
+//     res.json({
+//         status: 'ok',
+//         app: 'allow!! API...',
+//         version: '1.1.0'
+//     });
+// });
+
+// router.post('/allow/customers/blacklist', function (req: Request, res: Response) {
+//     res.json({
+//         status: 'ok',
+//         app: 'allow!! API...',
+//         version: '1.1.0'
+//     });
+// });
+// router.post('/allow/customers/whitelist', function (req: Request, res: Response) {
+//     res.json({
+//         status: 'ok',
+//         app: 'allow!! API...',
+//         version: '1.1.0'
+//     });
+// });
+
+// router.post('/initiate', kycController.initiateKYC);
+// router.post('/verify-phone', kycController.verifyPhone);
+// router.post('/verify-otp', kycController.verifyOTP);
+// router.post('/submit-personal-info', kycController.submitPersonalInfo);
+// router.post('/submit-identity', kycController.submitIdentity);
+// router.post('/submit-address', kycController.submitAddress);
+// router.post('/submit-bank-details', kycController.submitBankDetails);
+// router.post('/grant-data-access', kycController.grantDataAccess);
+// router.post('/perform-facial-recognition', kycController.performFacialRecognition);
+// router.post('/complete-verification', kycController.completeVerification);
+// router.get('/verified-data/:userId', kycController.getVerifiedData); // For startups to request data
 
 export default router;

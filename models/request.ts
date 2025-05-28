@@ -11,6 +11,7 @@ export interface RequestAttributes extends Model<InferAttributes<RequestAttribut
     encrypted_data?: string;
     allow_url?: string;
     kyc_token: string;
+    token_expires_at: Date;
     company_id: string;
     status: 'initiated' | 'otp_pending' | 'kyc_processing' | 'completed' | 'failed';
     created_at?: Date;
@@ -38,6 +39,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         encrypted_data: { type: DataTypes.TEXT, allowNull: true },
         allow_url: {type: DataTypes.STRING, allowNull: true},
         kyc_token: DataTypes.STRING, 
+        token_expires_at: { type: DataTypes.DATE, allowNull: false },
         company_id: {
             type: DataTypes.UUID,
             references: {

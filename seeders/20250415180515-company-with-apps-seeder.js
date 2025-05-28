@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require('uuid'); 
 const { createClient } = require("redis");
 const client = createClient({
-  url: `rediss://default:ATt0AAIjcDEzNzg4MDVmZDM2YzM0NzEwOWY4OTRkYTRkOTY5MWQ0OHAxMA@glorious-sheep-15220.upstash.io:6379`,
+  url: `rediss://default:AaZeAAIjcDEyZjZjMTdjYmZmMzU0MDk3ODFmY2I0ZmIyNDY0NjIzNHAxMA@generous-sunfish-42590.upstash.io:6379`,
   socket: {
     connectTimeout: 10000, // Set timeout to 10 seconds
   },
@@ -15,7 +15,7 @@ client.on("error", (error) => {
   //console.error(error);
 });
 client.on("connect", () => {
-  console.log('Redis URL:', `rediss://default:ATt0AAIjcDEzNzg4MDVmZDM2YzM0NzEwOWY4OTRkYTRkOTY5MWQ0OHAxMA@glorious-sheep-15220.upstash.io:6379`);
+  console.log('Redis URL:', `rediss://default:AaZeAAIjcDEyZjZjMTdjYmZmMzU0MDk3ODFmY2I0ZmIyNDY0NjIzNHAxMA@generous-sunfish-42590.upstash.io:6379`);
   console.log("Connected to Redis");
 });
 (async () => {

@@ -15,6 +15,12 @@ module.exports = {
         ),
         defaultValue: 'pending'
       },
+      kyc_level_achieved: {
+        type: Sequelize.ENUM(
+         'none', 'basic', 'advanced'
+        ),
+        defaultValue: 'none'
+      },
       verified_at: { type: Sequelize.DATE, allowNull: true },
       is_blacklisted: { type: Sequelize.BOOLEAN, defaultValue: false },
       created_at: { type: Sequelize.DATE, allowNull: false }, 

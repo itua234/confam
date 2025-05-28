@@ -2,7 +2,7 @@ import express, { Request as ExpressRequest, NextFunction, Response } from 'expr
 //const { cloudinaryUpload, uploadToBlob } = require('../../services/cloudinary');
 const { sequelize, models: { Request, Customer, Document } } = require('@models').default;
 import crypto from 'crypto';
-const { encrypt, decrypt } = require('@util/helper');
+const { encrypt, decrypt } = require('@util/encryption');
 import { Transaction } from 'sequelize';
 import { ref } from 'process';
 const tokenVaultService = require('@services/tokenVaultService');
@@ -20,6 +20,13 @@ function generateOTP() {
 }
 
 exports.initiate = async(req: ExpressRequest, res: Response) => {
+    const encrypted = encrypt(JSON.stringify(req.body.customer));
+    const decrypted = JSON.parse(decrypt(encrypted));
+    return res.json({
+        message: 'Encryption and decryption successful',
+        encrypted,
+        decrypted
+    });
     const {
         customer,
         reference,
@@ -29,6 +36,8 @@ exports.initiate = async(req: ExpressRequest, res: Response) => {
     } = req.body;
     try{
         const kyc_token = generateToken();
+        // Encrypt the initial customer PII
+        const encrypted_data = encrypt(JSON.stringify(customer));
         // Create request and customer atomically
         const result = await sequelize.transaction(async (t: Transaction) => {
             const request = await Request.create({
@@ -36,13 +45,14 @@ exports.initiate = async(req: ExpressRequest, res: Response) => {
                 reference,
                 redirect_url,
                 kyc_level,
-                bank_accounts,
+                bank_accounts_requested: bank_accounts,
                 kyc_token: kyc_token,
                 token_expires_at: new Date(Date.now() + 3600 * 1000), // 1 hour from now
+                encrypted_data
             }, { transaction: t });
 
             // Store the token mapping securely
-            await tokenVaultService.storeToken(kyc_token, customer);
+            //await tokenVaultService.storeToken(kyc_token, customer);
 
             return { request, customer };
         });
@@ -53,7 +63,7 @@ exports.initiate = async(req: ExpressRequest, res: Response) => {
             "allow_url": result.request.allow_url,
             reference: result.request.reference,
             "redirect_url": result.request.redirect_url,
-            "bank_accounts": result.request.bank_accounts,
+            "bank_accounts": result.request.bank_accounts_requested,
             "kyc_level": result.request.kyc_level,
             is_blacklisted: false
         };
