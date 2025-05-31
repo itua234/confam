@@ -30,3 +30,39 @@
 {"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 12:02:32"}
 {"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 12:02:32"}
 {"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 377ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 12:02:32"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 12:03:49"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 12:03:49"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 387ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 12:03:49"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 12:11:09"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 12:11:09"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 3944ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 12:11:13"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 12:26:04"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 12:26:04"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 343ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 12:26:04"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 13:45:23"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 13:45:23"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 359ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 13:45:23"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 14:27:43"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 14:27:43"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 411ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 14:27:43"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 14:28:38"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 14:28:38"}
+{"level":"info","message":"Authentication successful for App ID: da68b90e-29df-4aa1-b942-1a61097d7e14 (Company: Tech Innovators Inc.). Request processed in 384ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 14:28:38"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 14:55:17"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 14:55:17"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 407ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 14:55:17"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 14:57:26"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 14:57:26"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 379ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 14:57:27"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 16:38:35"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 16:38:35"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 419ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 16:38:35"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 16:43:37"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 16:43:37"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 359ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 16:43:37"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-28 16:47:46"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-28 16:47:46"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 357ms.","service":"kyc-saas-auth","timestamp":"2025-05-28 16:47:46"}
+{"level":"info","message":"Request received: POST /api/v1/allow/initiate from ::ffff:127.0.0.1","service":"kyc-saas-auth","timestamp":"2025-05-31 00:48:07"}
+{"level":"info","message":"Attempting authentication with key: sk_tes... (masked)","service":"kyc-saas-auth","timestamp":"2025-05-31 00:48:07"}
+{"level":"info","message":"Authentication successful for App ID: bbd8a4ae-eba4-48a8-b65d-d219aa6a34c3 (Company: Tech Innovators Inc.). Request processed in 471ms.","service":"kyc-saas-auth","timestamp":"2025-05-31 00:48:07"}

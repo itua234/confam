@@ -9,9 +9,9 @@ export interface CompanyAttributes extends Model<InferAttributes<CompanyAttribut
     email: string;
     password?: string;
     domain?: string;
-    webhookUrl?: string;
+    webhook_url?: string;
     verified: boolean;
-    notificationsEnabled: boolean;
+    notifications_enabled: boolean;
     email_verified_at?: Date;
 }
 
@@ -39,7 +39,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         },
         password: { type: DataTypes.STRING, allowNull: true },
         domain: { type: DataTypes.STRING, allowNull: true },
-        webhookUrl: { type: DataTypes.STRING, allowNull: true },
+        webhook_url: { type: DataTypes.STRING, allowNull: true },
         verified: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
@@ -48,7 +48,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
                 return Boolean(rawValue);
             }
         },
-        notificationsEnabled: { type: DataTypes.BOOLEAN, defaultValue: true },
+        notifications_enabled: { type: DataTypes.BOOLEAN, defaultValue: true },
         email_verified_at: { type: DataTypes.DATE, allowNull: true },
     }, {
         hooks: {

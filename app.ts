@@ -45,11 +45,11 @@ app.use(helmet());
 // });
 
 // Rate limiting
-const limiter = rateLimit({
-  max: 5, // limit each IP to 5 requests per windowMs
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  message: 'Too many verification attempts, please try again later'
-});
+// const limiter = rateLimit({
+//   max: 5, // limit each IP to 5 requests per windowMs
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   message: 'Too many verification attempts, please try again later'
+// });
 
 const { PORT, NODE_ENV } = process.env;
 
@@ -93,7 +93,7 @@ startServer().catch(console.log);
 // Routes configuration
 function useRoutes(): void {
   // Apply rate limiter to API routes
-  app.use('/api', limiter);
+  //app.use('/api', limiter);
 
   app.use((req, res, next) => {
     res.setHeader(

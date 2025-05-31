@@ -40,6 +40,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/allow/initiate', [authMiddleware.authenticateAppBySecretKey], kycController.initiate);
+router.get('/allow/:id', [], kycController.fetch_kyc_request);
 // router.get('/allow/verification/:kyc_token', kycController.showVerificationPage);
 // router.post('/allow/verify-phone', kycController.verifyPhone);
 

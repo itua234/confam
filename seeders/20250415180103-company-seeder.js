@@ -18,44 +18,14 @@ module.exports = {
       logo: faker.image.avatar(),
       password: hashedPassword,
       domain: faker.internet.domainName(),
-      webhookUrl: faker.internet.url(),
+      webhook_url: faker.internet.url(),
       verified: faker.datatype.boolean(),
-      notificationsEnabled: faker.datatype.boolean(),
+      notifications_enabled: faker.datatype.boolean(),
       email_verified_at: faker.date.past(),
       created_at: new Date(),
       updated_at: new Date()
     }));
     return queryInterface.bulkInsert('companies', companies);
-    // return queryInterface.bulkInsert('companies', [
-    //   {
-    //     id: uuidv4(),
-    //     name: 'Tech Innovators Inc.',
-    //     logo: 'https://example.com/logo1.png',
-    //     email: 'contact@techinnovators.com',
-    //     password: hashedPassword,
-    //     domain: 'techinnovators.com',
-    //     webhookUrl: 'https://webhooks.techinnovators.com',
-    //     verified: true,
-    //     notificationsEnabled: true,
-    //     email_verified_at: new Date(),
-    //     created_at: new Date(),
-    //     updated_at: new Date(),
-    //   },
-    //   {
-    //     id: uuidv4(),
-    //     name: 'Global Solutions Ltd.',
-    //     logo: 'https://example.com/logo2.png',
-    //     email: 'info@globalsolutions.com',
-    //     password: hashedPassword,
-    //     domain: 'globalsolutions.com',
-    //     webhookUrl: 'https://webhooks.globalsolutions.com',
-    //     verified: false,
-    //     notificationsEnabled: false,
-    //     email_verified_at: null,
-    //     created_at: new Date(),
-    //     updated_at: new Date(),
-    //   },
-    // ]);
   },
 
   down: async (queryInterface) => {

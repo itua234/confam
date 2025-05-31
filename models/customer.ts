@@ -4,14 +4,25 @@ const { encrypt, decrypt } = require('@util/helper');
 export interface CustomerAttributes extends Model<InferAttributes<CustomerAttributes>, InferCreationAttributes<CustomerAttributes>> {
     id: string;
     token: string;
-    phone?: string | null;
-    phone_verified_at?: Date;
-    encrypted_pii: string;
+    phone: string;
+    phone_verified_at?: Date | null;
+    encrypted_pii?: string | null;
     status: 'pending' | 'verified' | 'rejected';
-    kyc_level_achieved: 'none' | 'basic' | 'advanced';
-    verified_at?: Date;
+    kyc_level_achieved: 'none' | 'tier_1' | 'tier_2' | 'tier_3';
+    verified_at?: Date | null;
     is_blacklisted: boolean;
     verification_details?: string | null;
+
+    phone_hash: string;
+    dob: Date;
+    dob_hash: string;
+    nin?: string | null;
+    bvn?: string | null;
+    nin_hash?: string | null;
+    bvn_hash?: string | null;
+    address?: string | null;
+    access_type: 'temporary' | 'permanent';
+    facial_recognition_passed: boolean;
 }
 
 type CustomerModelStatic = typeof Model & {
@@ -22,30 +33,25 @@ type CustomerModelStatic = typeof Model & {
 module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').DataTypes) => {
     const Customer = <CustomerModelStatic>sequelize.define('Customer', {
         id: { type: DataTypes.UUID, primaryKey: true, defaultValue: DataTypes.UUIDV4 },
-        token: { type: DataTypes.STRING, allowNull: false },
+        token: { type: DataTypes.STRING, allowNull: false, unique: true },
         phone: {
             type: DataTypes.TEXT,
-            unique: true,
-            allowNull: true,
+            allowNull: false,
             get() {
-                const value = this.getDataValue('phone');
-                return value ? decrypt(value) : null;
-            },
-            set(value: string) {
-                if (value) {
-                    this.setDataValue('phone', encrypt(value));
-                } else {
-                    this.setDataValue('phone', null);
-                }
+                return decrypt(this.getDataValue('phone'));
             }
         },
+        phone_hash: { type: DataTypes.TEXT, allowNull: false },
+        dob: { type: DataTypes.DATE, allowNull: false },
+        dob_hash: { type: DataTypes.TEXT, allowNull: false },
         phone_verified_at: { type: DataTypes.DATE, allowNull: true },
         encrypted_pii: { type: DataTypes.TEXT, allowNull: true },
-        status: { type: DataTypes.ENUM('pending', 'verified', 'rejected'), defaultValue: 'pending' },
+        status: { type: DataTypes.ENUM('pending', 'verified', 'rejected'), allowNull: false, defaultValue: 'pending' },
         kyc_level_achieved: {
             type: DataTypes.ENUM(
-            'none', 'basic', 'advanced'
+                'none', 'tier_1', 'tier_2', 'tier_3'
             ),
+            allowNull: false,
             defaultValue: 'none'
         },
         verified_at: { type: DataTypes.DATE, allowNull: true },
@@ -56,8 +62,27 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
                 return Boolean(this.getDataValue('is_blacklisted'));
             }
         },
+        nin: {type: DataTypes.STRING, allowNull: true },
+        bvn: {type: DataTypes.STRING, allowNull: true },
+        nin_hash: { type: DataTypes.TEXT, allowNull: true, unique: true },
+        bvn_hash: { type: DataTypes.TEXT, allowNull: true, unique: true },
+        address: { type: DataTypes.STRING, allowNull: true },
+        access_type: { type: DataTypes.ENUM("temporary", "permanent"), allowNull: false, defaultValue: "permanent" },
+        facial_recognition_passed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
         //verification_details: { type: DataTypes.TEXT, allowNull: true }
     }, {
+        hooks: {
+            beforeUpdate: (customer: CustomerAttributes) => {
+                // Set verification timestamp when status becomes verified
+                if (customer.status === 'verified' && !customer.verified_at) {
+                    customer.verified_at = new Date();
+                }
+                // Clear verification timestamp when status is not verified
+                if (customer.status !== 'verified') {
+                    customer.verified_at = null;
+                }
+            }
+        },
         tableName: 'customers',
         timestamps: true,
         createdAt: 'created_at',

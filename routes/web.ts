@@ -30,6 +30,6 @@ const handleMulterError = (err: any, req: Request, res: Response, next: NextFunc
     next();
 }
 
-router.get('/:kyc_token', kycController.showVerificationPage);
+//router.get('/:kyc_token', kycController.showVerificationPage);
 
 export default router;

@@ -460,3 +460,157 @@ app.get('/api/kyc/status/:kycToken', async (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Save to Identity table for better data organization
+const verificationResponse = await thirdPartyNinService.verify(nin);
+
+if (verificationResponse.success) {
+  // Update customer core fields
+  await customer.update({
+    nin: nin,
+    nin_hash: hashFunction(nin),
+    kyc_level_achieved: 'tier_1',
+    status: customer.status === 'pending' ? 'verified' : customer.status,
+    verified_at: new Date()
+  });
+
+  // Create identity record for NIN verification data
+  await models.Identity.create({
+    customer_id: customer.id,
+    identity_type: 'NIN',
+    identity_value: nin,
+    verification_status: 'verified',
+    verification_date: new Date(),
+    verification_provider: 'NIMC',
+    verification_reference: verificationResponse.reference_id,
+    
+    // Store personal details
+    verified_data: encrypt(JSON.stringify({
+      first_name: verificationResponse.data.first_name,
+      last_name: verificationResponse.data.last_name,
+      middle_name: verificationResponse.data.middle_name,
+      date_of_birth: verificationResponse.data.date_of_birth,
+      gender: verificationResponse.data.gender,
+      address: verificationResponse.data.address,
+      phone: verificationResponse.data.phone,
+      verification_score: verificationResponse.data.confidence_score
+    })),
+    
+    metadata: JSON.stringify({
+      api_response_hash: hashFunction(JSON.stringify(verificationResponse)),
+      verification_timestamp: verificationResponse.timestamp,
+      data_quality_score: verificationResponse.data_quality_score
+    })
+  });
+}
+
+class CustomerVerificationService {
+  static async processNinVerification(customer: CustomerAttributes, nin: string) {
+    const transaction = await sequelize.transaction();
+    
+    try {
+      // Verify with third party
+      const verificationResponse = await thirdPartyNinService.verify(nin);
+      
+      if (!verificationResponse.success) {
+        throw new Error(`NIN verification failed: ${verificationResponse.error}`);
+      }
+
+      // Update customer record
+      await customer.update({
+        nin: nin,
+        nin_hash: hashFunction(nin),
+        kyc_level_achieved: this.determineKycLevel(customer, 'nin_verified'),
+        verification_details: JSON.stringify({
+          ...JSON.parse(customer.verification_details || '{}'),
+          nin_verification: {
+            verified: true,
+            date: new Date(),
+            provider: verificationResponse.provider,
+            reference: verificationResponse.reference_id,
+            confidence_score: verificationResponse.confidence_score
+          }
+        })
+      }, { transaction });
+
+      // Store detailed verification data
+      const identityRecord = await models.Identity.create({
+        customer_id: customer.id,
+        identity_type: 'NIN',
+        identity_value: nin,
+        verification_status: 'verified',
+        verification_date: new Date(),
+        verification_provider: verificationResponse.provider,
+        verification_reference: verificationResponse.reference_id,
+        
+        verified_data: encrypt(JSON.stringify({
+          personal_details: {
+            first_name: verificationResponse.data.first_name,
+            last_name: verificationResponse.data.last_name,
+            middle_name: verificationResponse.data.middle_name,
+            date_of_birth: verificationResponse.data.date_of_birth,
+            gender: verificationResponse.data.gender
+          },
+          contact_details: {
+            address: verificationResponse.data.address,
+            phone: verificationResponse.data.phone,
+            email: verificationResponse.data.email
+          },
+          verification_metadata: {
+            confidence_score: verificationResponse.confidence_score,
+            data_quality_indicators: verificationResponse.quality_indicators,
+            verification_timestamp: verificationResponse.timestamp
+          }
+        }))
+      }, { transaction });
+
+      // Update customer status if needed
+      if (customer.status === 'pending') {
+        await customer.update({
+          status: 'verified',
+          verified_at: new Date()
+        }, { transaction });
+      }
+
+      await transaction.commit();
+      
+      return {
+        success: true,
+        customer_updated: true,
+        identity_record_id: identityRecord.id,
+        kyc_level: customer.kyc_level_achieved
+      };
+
+    } catch (error) {
+      await transaction.rollback();
+      
+      // Log failed verification attempt
+      await models.Identity.create({
+        customer_id: customer.id,
+        identity_type: 'NIN',
+        identity_value: nin,
+        verification_status: 'failed',
+        verification_date: new Date(),
+        verification_provider: 'NIMC',
+        metadata: JSON.stringify({
+          error: error.message,
+          verification_attempt: true
+        })
+      });
+      
+      throw error;
+    }
+  }
+
+  private static determineKycLevel(customer: CustomerAttributes, newVerification: string): string {
+    // Logic to determine appropriate KYC level based on completed verifications
+    const currentLevel = customer.kyc_level_achieved;
+    
+    if (newVerification === 'nin_verified' && currentLevel === 'none') {
+      return 'tier_1';
+    }
+    
+    // Add more logic based on your KYC requirements
+    return currentLevel;
+  }
+}

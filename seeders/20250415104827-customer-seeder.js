@@ -6,15 +6,18 @@ const { v4: uuidv4 } = require('uuid'); // Add this for UUID generation
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'your-32-character-secret-key-here'; // Must be 32 characters
 const IV_LENGTH = 16; // For AES, this is always 16
 const FIXED_IV = Buffer.from('1234567890123456');
-const ALGORITHM = 'aes-256-cbc'; 
+const algorithm = 'aes-256-gcm';
 
 function encrypt(text) {
-  if (!text) return text;
-  
-  const cipher = crypto.createCipheriv(ALGORITHM, ENCRYPTION_KEY, FIXED_IV);
-  let encrypted = cipher.update(text);
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-  return encrypted.toString('hex');
+  const key = Buffer.from(process.env.ENCRYPTION_KEY, 'hex'); // Ensure key is a buffer
+  const iv = crypto.randomBytes(IV_LENGTH);
+  const cipher = crypto.createCipheriv(algorithm, key, iv);
+
+  let encrypted = cipher.update(text, 'utf8', 'hex');
+  encrypted += cipher.final('hex');
+  const authTag = cipher.getAuthTag().toString('hex');
+
+  return `${iv.toString('hex')}:${encrypted}:${authTag}`;
 }
 
 /** @type {import('sequelize-cli').Migration} */
@@ -23,11 +26,13 @@ module.exports = {
     const customers = Array.from({ length: 5 }, () => ({
       //id: uuidv4(),
       id: faker.string.uuid(),
-      phone: encrypt(faker.phone.number()),
+      token: uuidv4(),
+      //phone: encrypt(faker.phone.number()),
+      phone: encrypt("+2348114800769"),
       phone_verified_at: null,
-      verified: faker.datatype.boolean(),
       verified_at: new Date(),
-      status: faker.helpers.arrayElement(['VERIFIED', 'PENDING']),
+      status: "pending",
+      //status: faker.helpers.arrayElement(['VERIFIED', 'PENDING']),
       is_blacklisted: faker.datatype.boolean(),
       created_at: new Date(),
       updated_at: new Date(),

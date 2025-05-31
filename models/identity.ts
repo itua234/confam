@@ -1,12 +1,16 @@
-// identity.model.ts
 import { Sequelize, Model, DataTypes, InferAttributes, InferCreationAttributes } from 'sequelize';
+const { decrypt } = require('@util/encryption');
 
 export interface IdentityAttributes extends Model<InferAttributes<IdentityAttributes>, InferCreationAttributes<IdentityAttributes>> {
     id: string;
     customer_id: string;
     type: 'NIN' | 'BVN';
-    number: string;
-    verified_at?: Date;
+    value: string;
+    value_hash: string;
+    status: 'pending' | 'verified' | 'rejected' | 'expired' | 'revoked' | 'suspended';
+    verification_provider?: string;
+    provider_reference?: string| null;
+    verified_at?: Date | null;
     created_at?: Date;
     updated_at?: Date;
 }
@@ -27,9 +31,26 @@ module.exports = (sequelize: Sequelize) => {
                 key: 'id',
             },
         },
-        type: {type: DataTypes.ENUM('NIN', 'BVN'), allowNull: false},
-        number: {type: DataTypes.STRING, allowNull: false},
-        verified_at: {type: DataTypes.DATE, allowNull: true},
+        type: { type: DataTypes.ENUM('NIN', 'BVN'), allowNull: false },
+        value: { 
+            type: DataTypes.TEXT, 
+            allowNull: false,
+            get() {
+                const encryptedValue = this.getDataValue('value');
+                return encryptedValue ? decrypt(encryptedValue) : null;
+            }
+        },
+        value_hash: { type: DataTypes.TEXT, allowNull: false },
+        status: {
+            type: DataTypes.ENUM(
+                'pending', 'verified', 'rejected', 'expired', 'revoked', 'suspended'
+            ),
+            defaultValue: 'pending',
+            allowNull: false
+        },
+        verification_provider: { type: DataTypes.STRING, allowNull: true },
+        provider_reference: { type: DataTypes.STRING, allowNull: true },
+        verified_at: { type: DataTypes.DATE, allowNull: true },
     }, {
         tableName: 'identities',
         timestamps: true,

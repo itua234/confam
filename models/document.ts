@@ -1,13 +1,13 @@
 import { Sequelize, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
-const { encrypt, decrypt } = require('@util/helper');
+const { decrypt } = require('@util/encryption');
 
 // Define the DocumentAttributes interface
 export interface DocumentAttributes extends Model<InferAttributes<DocumentAttributes>, InferCreationAttributes<DocumentAttributes>> {
     id: string;
     customer_id: string;
-    identity_type: 'BVN' | 'NIN' | 'PASSPORT' | 'DRIVERS_LICENSE' | 'VOTERS_CARD' | 'RESIDENT_PERMIT' | 'WORK_PERMIT' | 'NATIONAL_ID' | 'OTHER';
-    identity_number: string;
-    identity_hash: string;
+    type: 'PASSPORT' | 'DRIVERS_LICENSE' | 'VOTERS_CARD' | 'RESIDENT_PERMIT' | 'WORK_PERMIT' | 'NATIONAL_ID' | 'OTHER';
+    value: string;
+    value_hash: string;
     image?: string;
     verified: boolean;
     verified_at?: Date;
@@ -30,23 +30,21 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
             },
             allowNull: false
         },
-        identity_type: { type: DataTypes.STRING, allowNull: false },
-        identity_number: { 
-            type: DataTypes.STRING, 
+        type: { type: DataTypes.STRING, allowNull: false },
+        value: { 
+            type: DataTypes.TEXT, 
             allowNull: false,
             get() {
-                const encryptedValue = this.getDataValue('identity_number');
+                const encryptedValue = this.getDataValue('value');
                 return encryptedValue ? decrypt(encryptedValue) : null;
-            },
-            set(value: string) {
-                this.setDataValue('identity_number', encrypt(value));
             }
         },
-        identity_hash: { type: DataTypes.STRING, allowNull: false },
+        value_hash: { type: DataTypes.TEXT, allowNull: false },
         image: { type: DataTypes.STRING, allowNull: true },
         verified: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
+            allowNull: false,
             get() {
                 const rawValue = this.getDataValue('verified');
                 return Boolean(rawValue);

@@ -34,10 +34,10 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         },  
         reference: { type: DataTypes.STRING, allowNull: false, unique: true },
         redirect_url: { type: DataTypes.STRING, allowNull: false },
-        kyc_level: { type: DataTypes.ENUM('basic', 'advanced'), defaultValue: 'basic' },
+        kyc_level: { type: DataTypes.ENUM('tier_1', 'tier_2', 'tier_3'), defaultValue: 'tier_1' },
         bank_accounts_requested: { type: DataTypes.BOOLEAN, defaultValue: false },
         encrypted_data: { type: DataTypes.TEXT, allowNull: true },
-        allow_url: {type: DataTypes.STRING, allowNull: true},
+        allow_url: {type: DataTypes.STRING, allowNull: true },
         kyc_token: DataTypes.STRING, 
         token_expires_at: { type: DataTypes.DATE, allowNull: false },
         company_id: {
@@ -53,7 +53,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         hooks: {
             beforeCreate: (request) => {
                 if (!request.allow_url) {
-                    request.allow_url = `https://api.allow.com/${request.kyc_token}`;
+                    request.allow_url = `http://127.0.0.1:5173/${request.id}`;
                 }
             },
         },
