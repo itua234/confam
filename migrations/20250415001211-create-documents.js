@@ -19,7 +19,7 @@ module.exports = {
         allowNull: false
       },
       value: { type: Sequelize.TEXT, allowNull: false },
-      value_hash: { type: Sequelize.TEXT, allowNull: false },
+      value_hash: { type: Sequelize.TEXT, allowNull: false, unique: true },
       image: { type: Sequelize.STRING, allowNull: true },
       verified: {type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
       verified_at: { type: Sequelize.DATE, allowNull: true },

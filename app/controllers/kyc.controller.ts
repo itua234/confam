@@ -1,6 +1,12 @@
 import express, { Request as ExpressRequest, NextFunction, Response } from 'express';
 //const { cloudinaryUpload, uploadToBlob } = require('../../services/cloudinary');
-const { sequelize, models: { Request, Customer, Document, Company } } = require('@models').default;
+const { sequelize, models: { 
+    Request, 
+    Customer, 
+    Document, 
+    Company,
+    Identity
+} } = require('@models').default;
 import crypto from 'crypto';
 const { encrypt, decrypt } = require('@util/encryption');
 import { Transaction, Op } from 'sequelize';
@@ -81,7 +87,18 @@ exports.initiate = async(req: ExpressRequest, res: Response) => {
         // Get company_id from req.app or wherever it's stored
         const app = (req.app as any);
         const webhook_url = app.webhook_url;
-        
+
+        //lookup existing customer by email or identity
+        const existingCustomer = await lookupCustomer(req.body);
+        // const customer = existingCustomer 
+        // ? await updateExistingCustomer(existingCustomer, req.body)
+        // : await createNewCustomer(req.body);
+        if(!existingCustomer) {
+            // Create new customer record if not found
+            console.log('Creating new customer record');
+            const newCustomer = await createNewCustomer(req.body);
+            console.log('New customer created:', newCustomer.id);
+        }
         // Create request and customer atomically
         const result = await sequelize.transaction(async (t: Transaction) => {
             const request = await Request.create({
@@ -98,7 +115,7 @@ exports.initiate = async(req: ExpressRequest, res: Response) => {
             // Store the token mapping securely
             //await tokenVaultService.storeToken(kyc_token, customer);
 
-            return { request, customer };
+            return { request, customer: existingCustomer };
         });
 
         const data = {
@@ -155,8 +172,11 @@ async function lookupCustomer(payload: any) {
     let foundCustomer = null;
     // Case 1: Lookup by email if available
     if (customer.email) {
+        const email = customer.email.trim().toLowerCase();
+        // Compute a hash of the email if that is how you store it.
+        const emailHash = hashFunction(email);
         foundCustomer = await Customer.findOne({
-            where: { email: customer.email },
+            where: { email_hash: emailHash },
         });
     }
     // Case 2: If no customer is found by email, try lookup via identity details
@@ -259,6 +279,24 @@ exports.fetch_kyc_request = async(req: ExpressRequest, res: Response) => {
             console.log('Existing customer found:', existing_customer);
             customer.token = existing_customer.token;
         }
+
+    //     const hashField = customerData.identity.type === 'NIN' ? 'nin_hash' : 'bvn_hash';
+    // let existingCustomer = await models.Customer.findOne({
+    //   where: {
+    //     [hashField]: identityHash
+    //   },
+    //   include: [
+    //     {
+    //       model: models.Identity,
+    //       as: 'identities',
+    //       where: {
+    //         identity_type: customerData.identity.type,
+    //         verification_status: { [Op.in]: ['verified', 'pending'] }
+    //       },
+    //       required: false
+    //     }
+    //   ]
+    // });
         
         //return res.redirect('/expired-or-invalid-token');
         //return res.render('main', { request, customer });

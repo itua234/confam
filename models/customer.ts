@@ -14,12 +14,9 @@ export interface CustomerAttributes extends Model<InferAttributes<CustomerAttrib
     verification_details?: string | null;
 
     phone_hash: string;
+    email_hash: string;
     dob: Date;
     dob_hash: string;
-    nin?: string | null;
-    bvn?: string | null;
-    nin_hash?: string | null;
-    bvn_hash?: string | null;
     address?: string | null;
     access_type: 'temporary' | 'permanent';
     facial_recognition_passed: boolean;
@@ -41,9 +38,6 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
                 return decrypt(this.getDataValue('phone'));
             }
         },
-        phone_hash: { type: DataTypes.TEXT, allowNull: false },
-        dob: { type: DataTypes.DATE, allowNull: false },
-        dob_hash: { type: DataTypes.TEXT, allowNull: false },
         phone_verified_at: { type: DataTypes.DATE, allowNull: true },
         encrypted_pii: { type: DataTypes.TEXT, allowNull: true },
         status: { type: DataTypes.ENUM('pending', 'verified', 'rejected'), allowNull: false, defaultValue: 'pending' },
@@ -62,10 +56,10 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
                 return Boolean(this.getDataValue('is_blacklisted'));
             }
         },
-        nin: {type: DataTypes.STRING, allowNull: true },
-        bvn: {type: DataTypes.STRING, allowNull: true },
-        nin_hash: { type: DataTypes.TEXT, allowNull: true, unique: true },
-        bvn_hash: { type: DataTypes.TEXT, allowNull: true, unique: true },
+        phone_hash: { type: DataTypes.TEXT, allowNull: false, unique: true },
+        email_hash: { type: DataTypes.TEXT, allowNull: false, unique: true },
+        dob: { type: DataTypes.DATE, allowNull: false },
+        dob_hash: { type: DataTypes.TEXT, allowNull: false },
         address: { type: DataTypes.STRING, allowNull: true },
         access_type: { type: DataTypes.ENUM("temporary", "permanent"), allowNull: false, defaultValue: "permanent" },
         facial_recognition_passed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },

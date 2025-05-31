@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false
       },
       value: { type: Sequelize.TEXT, allowNull: false },
-      value_hash: { type: Sequelize.TEXT, allowNull: false },
+      value_hash: { type: Sequelize.TEXT, allowNull: false, unique: true },
       status: {
         type: Sequelize.ENUM(
           'pending', 'verified', 'rejected', 'expired', 'revoked', 'suspended'
