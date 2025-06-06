@@ -2,3 +2,6 @@
 {"level":"error","message":"Authentication failed: Invalid API key - sk_tes...","service":"kyc-saas-auth","timestamp":"2025-05-28 06:50:39"}
 {"level":"error","message":"Authentication failed: Invalid API key - sk_tes...","service":"kyc-saas-auth","timestamp":"2025-05-28 11:36:37"}
 {"level":"error","message":"Authentication failed: Invalid API key - sk_tes...","service":"kyc-saas-auth","timestamp":"2025-05-28 11:36:40"}
+{"code":"ECONNRESET","errno":-4077,"level":"error","message":"Authentication error for key sk_tes...: read ECONNRESET","service":"kyc-saas-auth","stack":"Error: read ECONNRESET\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)","syscall":"read","timestamp":"2025-06-02 00:39:29"}
+{"code":"ECONNRESET","errno":-4077,"level":"error","message":"Authentication error for key sk_tes...: read ECONNRESET","service":"kyc-saas-auth","stack":"Error: read ECONNRESET\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)","syscall":"read","timestamp":"2025-06-02 23:39:37"}
+{"code":"ECONNRESET","errno":-4077,"level":"error","message":"Authentication error for key sk_tes...: read ECONNRESET","service":"kyc-saas-auth","stack":"Error: read ECONNRESET\n    at TLSWrap.onStreamRead (node:internal/stream_base_commons:216:20)","syscall":"read","timestamp":"2025-06-06 13:14:34"}

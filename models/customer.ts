@@ -1,22 +1,20 @@
 import { Sequelize, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
-const { encrypt, decrypt } = require('@util/helper');
+const { decrypt } = require('@util/encryption');
 
 export interface CustomerAttributes extends Model<InferAttributes<CustomerAttributes>, InferCreationAttributes<CustomerAttributes>> {
     id: string;
     token: string;
-    phone: string;
+    phone?: string | null;
     phone_verified_at?: Date | null;
     encrypted_pii?: string | null;
     status: 'pending' | 'verified' | 'rejected';
     kyc_level_achieved: 'none' | 'tier_1' | 'tier_2' | 'tier_3';
     verified_at?: Date | null;
     is_blacklisted: boolean;
-    verification_details?: string | null;
-
-    phone_hash: string;
+    //verification_details?: string | null;
+    email: string;
     email_hash: string;
-    dob: Date;
-    dob_hash: string;
+    dob?: Date | null;
     address?: string | null;
     access_type: 'temporary' | 'permanent';
     facial_recognition_passed: boolean;
@@ -33,9 +31,10 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         token: { type: DataTypes.STRING, allowNull: false, unique: true },
         phone: {
             type: DataTypes.TEXT,
-            allowNull: false,
+            allowNull: true,
             get() {
-                return decrypt(this.getDataValue('phone'));
+                const value = this.getDataValue('phone');
+                return value ? decrypt(value) : null;
             }
         },
         phone_verified_at: { type: DataTypes.DATE, allowNull: true },
@@ -52,14 +51,21 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         is_blacklisted: {
             type: DataTypes.BOOLEAN,
             defaultValue: false,
+            allowNull: false,
             get() {
                 return Boolean(this.getDataValue('is_blacklisted'));
             }
         },
-        phone_hash: { type: DataTypes.TEXT, allowNull: false, unique: true },
+        email: { 
+            type: DataTypes.TEXT, 
+            allowNull: false,
+            get() {
+                const value = this.getDataValue('email');
+                return value ? decrypt(value) : null;
+            }
+        },
         email_hash: { type: DataTypes.TEXT, allowNull: false, unique: true },
-        dob: { type: DataTypes.DATE, allowNull: false },
-        dob_hash: { type: DataTypes.TEXT, allowNull: false },
+        dob: { type: DataTypes.DATE, allowNull: true },
         address: { type: DataTypes.STRING, allowNull: true },
         access_type: { type: DataTypes.ENUM("temporary", "permanent"), allowNull: false, defaultValue: "permanent" },
         facial_recognition_passed: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },

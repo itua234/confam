@@ -1,6 +1,5 @@
 import { Sequelize, Model, InferAttributes, InferCreationAttributes } from 'sequelize';
-//const { v4: uuidv4 } = require('uuid');
-//import { nanoid } from 'nanoid';
+import { nanoid } from 'nanoid';
 
 export interface RequestAttributes extends Model<InferAttributes<RequestAttributes>, InferCreationAttributes<RequestAttributes>> {
     id: string;
@@ -53,7 +52,7 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
         hooks: {
             beforeCreate: (request) => {
                 if (!request.allow_url) {
-                    request.allow_url = `http://127.0.0.1:5173/${request.id}`;
+                    request.allow_url = `http://127.0.0.1:5173/${request.kyc_token}`;
                 }
             },
         },
@@ -67,11 +66,6 @@ module.exports = (sequelize: Sequelize, DataTypes: typeof import('sequelize').Da
 };
 
 function generateCustomId() {
-    return "re" + crypto.randomUUID().replace(/-/g, "").substring(0, 10).toUpperCase();
-    // return "re" + nanoid(10).toUpperCase();
-
-    // const prefix = 're'; // Your custom prefix
-    // const randomPart = Math.random().toString(36).substring(2, 10).toUpperCase();
-    // const timestampPart = Date.now().toString(36).substring(4, 7);
-    // return `${prefix}${randomPart}${timestampPart}`;
+    return crypto.randomUUID().replace(/-/g, "");
+    //return "re" + nanoid(10).toUpperCase();
 }

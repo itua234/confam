@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 const router = express.Router();
 import authMiddleware from "@middleware/auth.middleware";
 import multer, { MulterError, StorageEngine } from 'multer';
-//import customerValidator from '@validators/auth.validator';
+import kycValidator from '@validators/kyc.validator';
 
 // const authRoutes = require('./authRoutes');
 // const auth = require('@controllers/auth.controller');
@@ -39,8 +39,12 @@ router.get('/', (req: Request, res: Response) => {
     });
 });
 
-router.post('/allow/initiate', [authMiddleware.authenticateAppBySecretKey], kycController.initiate);
-router.get('/allow/:id', [], kycController.fetch_kyc_request);
+router.post('/allow/initiate', [
+    authMiddleware.authenticateAppBySecretKey,
+    //kycValidator.initialize_kyc
+], kycController.initiate);
+router.get('/allow/:kyc_token', [], kycController.fetch_request);
+router.post('/allow', [], kycController.dummyEndpoint);
 // router.get('/allow/verification/:kyc_token', kycController.showVerificationPage);
 // router.post('/allow/verify-phone', kycController.verifyPhone);
 

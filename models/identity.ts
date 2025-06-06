@@ -6,9 +6,9 @@ export interface IdentityAttributes extends Model<InferAttributes<IdentityAttrib
     customer_id: string;
     type: 'NIN' | 'BVN';
     value: string;
-    value_hash: string;
     status: 'pending' | 'verified' | 'rejected' | 'expired' | 'revoked' | 'suspended';
-    verification_provider?: string;
+    verified: boolean;
+    verification_provider?: string | null;
     provider_reference?: string| null;
     verified_at?: Date | null;
     created_at?: Date;
@@ -40,13 +40,19 @@ module.exports = (sequelize: Sequelize) => {
                 return encryptedValue ? decrypt(encryptedValue) : null;
             }
         },
-        value_hash: { type: DataTypes.TEXT, allowNull: false },
-        status: {
-            type: DataTypes.ENUM(
-                'pending', 'verified', 'rejected', 'expired', 'revoked', 'suspended'
-            ),
-            defaultValue: 'pending',
-            allowNull: false
+        verified: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false,
+            allowNull: false,
+            get() {
+                return Boolean(this.getDataValue('verified'));
+            }
+        },
+        is_shareable: {
+            type: DataTypes.VIRTUAL,
+            get() {
+                return true
+            }
         },
         verification_provider: { type: DataTypes.STRING, allowNull: true },
         provider_reference: { type: DataTypes.STRING, allowNull: true },

@@ -1,32 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import niv from 'node-input-validator';
 import { Sequelize, QueryTypes, Op } from 'sequelize';
-const { sequelize }: { 
-    sequelize: Sequelize; 
-} = require('@models');
+const db = require('@models').default;
+const { sequelize } = db;
 const {returnValidationError} = require("@util/helper");
 
-niv.extend('hasSpecialCharacter', ({ value }: { value: string }) => {
-    if(!value.match(/[^a-zA-Z0-9]/)){
-        //Return an error if the value does not contain a special character
-        return false;
-    }
-    return true;
-})
-niv.extend('containsNumber', ({ value }: { value: string }) => {
-    if(!value.match(/\d/)){
-        //Return an error if the value does not contain a special character
-        return false;
-    }
-    return true;
-})
-niv.extend('isSingleWord', ({ value }: { value: string }) => {
-    if(value.includes(" ")){
-        //Return an error if the value does not contain a special character
-        return false;
-    }
-    return true;
-})
 niv.extend('unique', async ({ attr, value, args }: { attr: string; value: string; args: string[] }) => {
     const table = args[0];
     const field = args[1] || attr;
@@ -100,81 +78,35 @@ niv.extendMessages({
 
 //export the schemas
 export default {
-    login: async(req: Request, res: Response, next: NextFunction) => {
-        const v = new niv.Validator(req.body, {
-            email: 'required|email',
-            password: 'required|string',
-        });
-
-        let matched = await v.check();
-        if(!matched){
-            let errors = v.errors;
-            returnValidationError(errors, res, "Login failed");
-        }else{
-            if(!req.value){
-                req.value = {}
-            }
-            req.body = v.inputs;
-            next();
-        }
-    },
-
-    google_login: async(req: Request, res: Response, next: NextFunction) => {
-        const v = new niv.Validator(req.body, {
-            email: 'required|string|email',
-            firstname: 'required|string',
-            lastname: 'required|string',
-            photo: 'required|string',
-            googleId: 'required|string',
-        });
-
-        let matched = await v.check();
-        if(!matched){
-            let errors = v.errors;
-            returnValidationError(errors, res, "Google authentication failed");
-        }else{
-            if(!req.value){
-                req.value = {}
-            }
-            req.body = v.inputs;
-            next();
-        }
-    },
-
-    validateCustomerPayload: async (req: Request, res: Response, next: NextFunction) => {
+    initialize_kyc: async (req: Request, res: Response, next: NextFunction) => {
+        const messages = {
+           'customer.required': '',
+           'reference.required': 'A unique reference is required for this request',
+           'reference.unique': 'Invalid reference, please retry with a unique reference',
+           'redirect_url.required': 'A valid redirect URL is required',
+        };
         const v = new niv.Validator(req.body, {
             'customer.name': 'required|string',
             'customer.address': 'required|string',
             'customer.email': 'required|email',
             'customer.identity.number': 'required|string|minLength:11|maxLength:11',
-            'customer.identity.type': 'required|string|in:bvn,nin,passport',
-            'reference': 'required|string',
+            'customer.identity.type': 'required|string|in:BVN,NIN',
+            'reference': 'required|string|unique:requests,reference',
             'redirect_url': 'required|url',
             'kyc_level': 'required|string|in:tier_1,tier_2,tier_3',
             'bank_accounts': 'boolean',
-        });
+        }, messages);
 
         const matched = await v.check();
         if (!matched) {
             const errors = v.errors;
             returnValidationError(errors, res, "Validation failed for customer payload");
         } else {
-            if (!req.value) {
-                req.value = {};
-            }
+            // if (!req.value) {
+            //     req.value = {};
+            // }
             req.body = v.inputs;
             next();
         }
     },
 }
-// {
-//     reference: 'required|string',
-//     redirect_url: 'required|string|url',
-//     kyc_level: 'required|string|in:tier_1,tier_2,tier_3',
-//     bank_accounts: 'required|boolean',
-//     'customer.name': 'required|string',
-//     'customer.email': 'required|string|email',
-//     'customer.address': 'required|string',
-//     'customer.identity.type': 'required|string|in:BVN,NIN',
-//     'customer.identity.number': 'required|string',
-// }

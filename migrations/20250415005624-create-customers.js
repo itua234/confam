@@ -6,11 +6,10 @@ module.exports = {
     await queryInterface.createTable('customers', {
       id: { type: Sequelize.UUID, primaryKey: true, defaultValue: Sequelize.UUIDV4 },
       token: { type: Sequelize.STRING, allowNull: false, unique: true },
-      phone: { type: Sequelize.STRING, allowNull: false },
-      phone_hash: { type: Sequelize.TEXT, allowNull: false, unique: true },
-      email_hash: { type: Sequelize.TEXT, allowNull: false, unique: true },
-      dob: { type: Sequelize.DATE, allowNull: false },
-      dob_hash: { type: Sequelize.TEXT, allowNull: false },
+      phone: { type: Sequelize.STRING, allowNull: true },
+      email: { type: Sequelize.TEXT, allowNull: false },
+      email_hash: { type: Sequelize.TEXT, allowNull: false },
+      dob: { type: Sequelize.DATE, allowNull: true },
       phone_verified_at: {type: Sequelize.DATE, allowNull: true },
       encrypted_pii: { type: Sequelize.TEXT, allowNull: true },
       status: {
@@ -28,7 +27,7 @@ module.exports = {
         allowNull: false
       },
       verified_at: { type: Sequelize.DATE, allowNull: true },
-      is_blacklisted: { type: Sequelize.BOOLEAN, defaultValue: false },
+      is_blacklisted: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
       address: { type: Sequelize.STRING, allowNull: true },
       access_type: { type: Sequelize.ENUM("temporary", "permanent"), allowNull: false, defaultValue: "permanent" },
       facial_recognition_passed: { type: Sequelize.BOOLEAN, allowNull: false, defaultValue: false },
@@ -37,7 +36,6 @@ module.exports = {
     });
     // Add indexes for faster lookups when searching
     await queryInterface.addIndex('customers', ['token']);
-    await queryInterface.addIndex('customers', ['phone_hash']);
     await queryInterface.addIndex('customers', ['status']);
     await queryInterface.addIndex('customers', ['kyc_level_achieved']);
     await queryInterface.addIndex('customers', ['is_blacklisted']);

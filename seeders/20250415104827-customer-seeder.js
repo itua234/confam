@@ -20,15 +20,25 @@ function encrypt(text) {
   return `${iv.toString('hex')}:${encrypted}:${authTag}`;
 }
 
+function generateToken() {
+    return crypto.randomBytes(16).toString('hex'); // Generate a 64-character hex token
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  up: async (queryInterface) => {
+  up: async (queryInterface, Sequelize) => {
+    const dob = faker.date.past(30, new Date());
+    console.log("birthdate", dob);
+    console.log("birthdate iso", dob.toISOString());
     const customers = Array.from({ length: 5 }, () => ({
       //id: uuidv4(),
       id: faker.string.uuid(),
-      token: uuidv4(),
+      token: generateToken(),
       //phone: encrypt(faker.phone.number()),
       phone: encrypt("+2348114800769"),
+      dob: dob,
+      email: encrypt("softech234@gmail.com"),
+      email_hash: crypto.createHash('sha256').update("softech234@gmail.com").digest('hex'),
       phone_verified_at: null,
       verified_at: new Date(),
       status: "pending",
@@ -37,7 +47,31 @@ module.exports = {
       created_at: new Date(),
       updated_at: new Date(),
     }));
-    return queryInterface.bulkInsert('customers', customers);
+    await queryInterface.bulkInsert('customers', customers,  { returning: true });
+
+    // Retrieve the inserted customer's ID manually
+    const [customer] = await queryInterface.sequelize.query(
+      `SELECT id FROM customers WHERE status = 'pending' LIMIT 1;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+    const customerId = customer.id;
+     // Generate identity data
+        const identity = [
+          {
+            id: uuidv4(),
+            type: "NIN",
+            value: encrypt("1234567890"),
+            // value_hash: crypto.createHash('sha256').update("1234567890").digest('hex'),
+            status: 'pending',
+            customer_id: customerId, 
+            verified_at: null,
+            created_at: new Date(),
+            updated_at: new Date(),
+          },
+        ];
+    
+        // Insert apps into the database
+        await queryInterface.bulkInsert('identities', identity);
   },
 
   down: async (queryInterface) => {
